@@ -1,2 +1,0 @@
-# PixivDaily
-pixiv日榜
