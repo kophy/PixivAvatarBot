@@ -1,4 +1,14 @@
-[bot]
-bot_token = 
+[BOT]
+TOKEN = 
 
-[redis]
+[CACHE]
+MAX_CACHE_NUMBER = 100      # 最大cache头像文件数
+PER_DELETE_NUMBER = 20      # 每次删除文件数
+
+[RANK]
+RANK_UPDATE_PERIOD = 60     # 更新日榜pid周期(单位：分钟)
+RANK_UPDATE_NUMBER = 100    # 抓取日榜前多少名的pid
+
+[REDIS]
+MAX_SET_SIZE =
+EXPIRE_TIME =
