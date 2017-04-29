@@ -2,24 +2,43 @@
 # -*- coding: utf-8 -*-
 
 import cv2
-import sys
+import numpy
+from PIL import Image
 
-cascade = cv2. CascadeClassifier("lib/lbpcascade_animeface.xml");
-image = cv2.imread("data/4.jpg");
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY);
-gray = cv2.equalizeHist(gray);
-faces = cascade.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 5, minSize = (25, 25));
+import os
 
-areas = [w * h for (x, y, w, h) in faces];
-print areas.index(max(areas));
+detector = cv2. CascadeClassifier("lib/lbpcascade_animeface.xml");
 
-for (x, y, w, h) in faces:
-    cropped = image[int(y - 0.3 * h):int(y + 1.3 * h), int(x - 0.3 * w):int(x + 1.3 * w)]
-    cv2.rectangle(image, (int(x - 0.25 * w), int(y - 0.25 * h)), (int(x + 1.25 * w), int(y + 1.25 * h)), (0, 0, 255), 2)
+# 检测图片中是否有人脸
+def detect_faces(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY);
+    gray = cv2.equalizeHist(gray);
+    faces = detector.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 5, minSize = (25, 25));
+    return faces;
 
-cv2.imshow("AnimeFaceDetect", image)
-cv2.waitKey(0)
-cv2.imwrite("out.png", cropped)
+# 存在人脸则返回头像图片，否则None
+def crop_avatar(image):
+    faces = detect_faces(image);
+    if len(faces) == 0:
+        return None;
+    areas = [w * h for (x, y, w, h) in faces];
+    idx = areas.index(max(areas));  # 选择最大的人脸
+    x, y, w, h = faces[idx];
+    width = max(w, h);
+    cropped = image[int(y - 0.3 * width):int(y + 1.3 * width),
+                    int(x - 0.3 * width):int(x + 1.3 * width)];
+    return cropped;
 
-def crop_avatar(filename, scaling = 0.25):
-    pass;
+# 删除下载文件
+def get_avatar(dir, filename):
+    pil_image = numpy.array(Image.open(os.path.join(dir, filename)));
+    image = cv2.cvtColor(numpy.array(pil_image), cv2.COLOR_RGB2BGR);
+    avatar = crop_avatar(image);
+    if avatar is None:
+        return False;
+    cv2.imwrite(os.path.join(dir, "avatar" + filename), avatar);
+    return True;
+
+if __name__ == "__main__":
+    flag = get_avatar("data", "1.png");
+    print flag;
