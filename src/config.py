@@ -5,17 +5,18 @@
 头像配置部分
 """
 LOWEST_RANK = 100;  # 排名范围
-FACE_WIDTH = 30;    # 头像检测时窗口宽度
+FACE_WIDTH = 50;    # 头像检测时窗口宽度
+CACHE_DIR = "data";
 
 """
 Redis配置部分
 """
 RANK_ID_SET = "rank_id_set";
 RANK_ID_PKL_MAP = "rank_id2pkl_map";
-RANK_EXPIRE_TIME = 60;
+RANK_EXPIRE_TIME = 300;
 
 CACHE_FILE_LIST = "cache_file_list";
-MAX_CACHE_FILE_NUM = 100;
+MAX_CACHE_FILE_NUM = 200;
 PER_ERASE_FILE_NUM = 20;
 
 """
@@ -23,7 +24,7 @@ PER_ERASE_FILE_NUM = 20;
 """
 START_TEXT = (
     "欢迎使用PixivAvatarBot\n"
-    "使用 /help 了解命令"
+    "/help - 了解命令"
 );
 
 HELP_TEXT = (

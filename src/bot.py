@@ -12,8 +12,8 @@ from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHa
 import pixivpy3
 import redis
 
-from avatar import *
-from download import *
+from avatar import generate_avatar
+from download import download_image
 from config import *
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -67,7 +67,7 @@ def add_cache(avatar_filename):
     if redis_server.llen(CACHE_FILE_LIST) > MAX_CACHE_FILE_NUM:
         for i in range(PER_ERASE_FILE_NUM):
             temp = redis_server.rpop(CACHE_FILE_LIST);
-            os.remove(os.path.join("data", temp));
+            os.remove(os.path.join(CACHE_DIR, temp));
     redis_server.lpush(CACHE_FILE_LIST, avatar_filename);
 
 # 从cache中随机获取头像文件
@@ -96,9 +96,8 @@ def rank(bot, update):
     # cache中没有该头像文件
     if not find_cache(avatar_filename):
         # 下载文件 + 提取头像都成功
-        if download_image(url, "data", filename) and generate_avatar("data", filename):
+        if download_image(url, CACHE_DIR, filename) and generate_avatar(CACHE_DIR, filename):
             add_cache(avatar_filename);
-
         # 从目前缓存的头像中随机取, TODO：存在冷启动问题
         else:
             avatar_filename = get_random_from_cache();
@@ -106,7 +105,7 @@ def rank(bot, update):
                 update.message.reply_text(NO_AVATAR_TEXT);
                 return;
 
-    with open(os.path.join("data", avatar_filename), "rb") as f:
+    with open(os.path.join(CACHE_DIR, avatar_filename), "rb") as f:
         update.message.reply_photo(f);
         pid = filter(str.isdigit, avatar_filename);
         update.message.reply_text("pixiv id = %s" % str(pid));

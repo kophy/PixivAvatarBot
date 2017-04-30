@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 
 redis-cli flushall
-rm data/*
-python src/bot.py
+sudo rm data/*
+sudo python src/bot.py
