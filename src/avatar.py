@@ -29,14 +29,14 @@ def crop_avatar(image):
                     int(x - 0.3 * width):int(x + 1.3 * width)];
     return cropped;
 
-# 删除下载文件
-def get_avatar(dir, filename):
+# 生成头像图片文件，返回bool值表示生成是否成功
+def generate_avatar(dir, filename):
     pil_image = numpy.array(Image.open(os.path.join(dir, filename)));
     image = cv2.cvtColor(numpy.array(pil_image), cv2.COLOR_RGB2BGR);
     avatar = crop_avatar(image);
     if avatar is None:
         return False;
-    cv2.imwrite(os.path.join(dir, "avatar" + filename), avatar);
+    cv2.imwrite(os.path.join(dir, "avatar_" + filename), avatar);
     return True;
 
 if __name__ == "__main__":
