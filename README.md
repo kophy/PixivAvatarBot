@@ -1,6 +1,15 @@
 # PixivAvatarBot
 
-*A Telegram Bot to help you find avatar from Pixiv.*  
-*专业治疗换头像强迫症√*
+*A Telegram Bot to get avatar from Pixiv.*    
+*从p站找头像的Telegram机器人*
 
-[@PixivAvatarBot](https://telegram.me/PixivAvatarBot)
+## 使用
+
+点击[@PixivAvatarBot](https://telegram.me/PixivAvatarBot)，开始对话
+
+![例子](https://raw.githubusercontent.com/kophy/PixivAvatarBot/master/img/example.png?token=AP1Bb9rghjDn7w3VdQgNznIjYGJqJJS0ks5ZD67owA%3D%3D)
+
+## 感谢
+
+- [lbpcascade_animeface](https://github.com/nagadomi/lbpcascade_animeface)
+- [pixivpy](https://github.com/upbit/pixivpy)
