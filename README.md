@@ -13,3 +13,8 @@
 
 - [lbpcascade_animeface](https://github.com/nagadomi/lbpcascade_animeface)
 - [pixivpy](https://github.com/upbit/pixivpy)
+
+## TODO
+
+- 从bot.py分离图片相关操作到illust.py
+- 把缓存与下载放在utils.py里
