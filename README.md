@@ -13,6 +13,7 @@
 
 - [lbpcascade_animeface](https://github.com/nagadomi/lbpcascade_animeface)
 - [pixivpy](https://github.com/upbit/pixivpy)
+- 友人[geoffreyQiu](https://github.com/geoffreyQiu)提供的cache策略
 
 ## TODO
 
