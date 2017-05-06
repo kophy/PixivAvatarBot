@@ -14,6 +14,7 @@ import redis
 
 from avatar import generate_avatar
 from download import download_image
+from file_cache import find_cache, add_cache, get_random_from_cache
 from config import *
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,10 +22,6 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
 logger = logging.getLogger(__name__);
 
 redis_server = redis.Redis(host = 'localhost', port = 6379,db = 0);
-
-"""
-头像处理函数
-"""
 
 def get_top_K_illust(K):
     api = pixivpy3.AppPixivAPI();
@@ -55,28 +52,6 @@ def get_illust_from_ranking():
         # print "redis success";
     return illust;
 
-# 检测这种头像是否已经存在
-def find_cache(avatar_filename):
-    if redis_server.lrem(CACHE_FILE_LIST, avatar_filename) > 0:
-        add_cache(avatar_filename);
-        return True;
-    return False;
-
-# 记录生成的头像，维持cache总数
-def add_cache(avatar_filename):
-    if redis_server.llen(CACHE_FILE_LIST) > MAX_CACHE_FILE_NUM:
-        for i in range(PER_ERASE_FILE_NUM):
-            temp = redis_server.rpop(CACHE_FILE_LIST);
-            os.remove(os.path.join(CACHE_DIR, temp));
-    redis_server.lpush(CACHE_FILE_LIST, avatar_filename);
-
-# 从cache中随机获取头像文件
-def get_random_from_cache():
-    L = redis_server.llen(CACHE_FILE_LIST);
-    if L > 0:
-        return redis_server.lindex(CACHE_FILE_LIST, random.randint(0, L - 1));
-    return None;
-
 """
 bot handler函数
 """
@@ -86,28 +61,34 @@ def start(bot, update):
 def help(bot, update):
     update.message.reply_text(HELP_TEXT);
 
-# 从日榜图片中获取头像
 def rank(bot, update):
+    """
+    从日榜图片中获取头像
+    """
     illust = get_illust_from_ranking();
     url = illust.image_urls.large;
     filename = (str(illust.id) + "." + url.split(".")[-1]).encode("ascii");
-    avatar_filename = "avatar_" + filename;
+    filepath = os.path.join(CACHE_DIR, filename);
+    avatar_filepath = os.path.join(CACHE_DIR, "avatar_" + filename);
 
     # cache中没有该头像文件
-    if not find_cache(avatar_filename):
+    if not find_cache(avatar_filepath):
+        success = download_image(url, CACHE_DIR, filename) and generate_avatar(CACHE_DIR, filename);
+        if os.path.exists(filepath):
+            os.remove(filepath);
         # 下载文件 + 提取头像都成功
-        if download_image(url, CACHE_DIR, filename) and generate_avatar(CACHE_DIR, filename):
-            add_cache(avatar_filename);
+        if success:
+            add_cache(avatar_filepath);
         # 从目前缓存的头像中随机取, TODO：存在冷启动问题
         else:
-            avatar_filename = get_random_from_cache();
-            if avatar_filename == None:
+            avatar_filepath = get_random_from_cache();
+            if avatar_filepath == None:
                 update.message.reply_text(NO_AVATAR_TEXT);
                 return;
 
-    with open(os.path.join(CACHE_DIR, avatar_filename), "rb") as f:
+    with open(avatar_filepath, "rb") as f:
         update.message.reply_photo(f);
-        pid = filter(str.isdigit, avatar_filename);
+        pid = filter(str.isdigit, avatar_filepath); # 从文件名提取pid
         update.message.reply_text("pixiv id = %s" % str(pid));
 
 # TODO

@@ -5,7 +5,6 @@
 头像配置部分
 """
 LOWEST_RANK = 100;  # 排名范围
-FACE_WIDTH = 50;    # 头像检测时窗口宽度
 CACHE_DIR = "data";
 
 """
@@ -14,10 +13,6 @@ Redis配置部分
 RANK_ID_SET = "rank_id_set";
 RANK_ID_PKL_MAP = "rank_id2pkl_map";
 RANK_EXPIRE_TIME = 300;
-
-CACHE_FILE_LIST = "cache_file_list";
-MAX_CACHE_FILE_NUM = 200;
-PER_ERASE_FILE_NUM = 20;
 
 """
 提示语部分

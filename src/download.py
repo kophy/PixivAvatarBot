@@ -2,27 +2,28 @@
 # -*- coding: utf-8 -*-
 
 import requests
-import urllib2
-
 import os
 import sys
+from random import randint
+import time
 
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) \
-              AppleWebKit/537.36 (KHTML, like Gecko) \
-              Chrome/44.0.2403.155 Safari/537.36";
-HEADERS = {"Referer": "http://www.pixiv.net", "User-Agent": USER_AGENT};
-MAX_RETRY = 5;
-
-# 从P站下载图片，返回bool值表示下载是否成功
 def download_image(url, dir, filename):
-    for i in range(MAX_RETRY):
+    """
+    从P站下载图片
+    :return: 表示下载是否成功的bool值
+    """
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) \
+                  AppleWebKit/537.36 (KHTML, like Gecko) \
+                  Chrome/44.0.2403.155 Safari/537.36";
+    headers = {"Referer": "http://www.pixiv.net", "User-Agent": user_agent};
+    for i in range(3):
         try:
-            response = requests.get(url, headers = HEADERS, timeout = 10);
-            with open(os.path.join(dir, filename), 'wb') as f:
+            response = requests.get(url, headers = headers, timeout = 10);
+            with open(os.path.join(dir, filename), "wb") as f:
                 f.write(response.content);
             return True;
         except requests.exceptions.RequestException:
-            time.sleep(random.randint(5, 10));
+            time.sleep(randint(5, 10));
     return False;
 
 if __name__ == "__main__":
