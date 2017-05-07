@@ -5,11 +5,14 @@ import redis
 import os
 from random import randint
 
-CACHE_NAME = "cached_filepath_list";
-MAX_CACHE_NUM = 200;
-PER_ERASE_NUM = 20;
+from config import rs
 
-rs = redis.Redis(host = "localhost", port = 6379,db = 0);
+"""
+可配置参数
+"""
+CACHE_NAME = "cached_filepath_list";    # redis中保存缓存文件信息的链表
+MAX_CACHE_NUM = 200;                    # 最大缓存文件数
+PER_ERASE_NUM = 20;                     # 缓存满时删除文件数
 
 def find_cache(filepath):
     """

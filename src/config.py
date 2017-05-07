@@ -4,15 +4,13 @@
 """
 头像配置部分
 """
-LOWEST_RANK = 100;  # 排名范围
 CACHE_DIR = "data";
 
 """
 Redis配置部分
 """
-RANK_ID_SET = "rank_id_set";
-RANK_ID_PKL_MAP = "rank_id2pkl_map";
-RANK_EXPIRE_TIME = 300;
+import redis
+rs = redis.Redis(host = "localhost", port = 6379,db = 0);
 
 """
 提示语部分
