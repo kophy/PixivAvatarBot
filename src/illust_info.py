@@ -15,6 +15,7 @@ RANK_QUERY_NUM = 100;                   # 每次从日榜获取的图片信息�
 def get_top_illusts(K):
     """
     获取日榜中前K名的信息
+    :param K: 要获取的图片信息数量
     :return: 日榜中前K张图片的信息list
     """
     api = pixivpy3.AppPixivAPI();
@@ -29,8 +30,8 @@ def get_top_illusts(K):
 # TODO: 优化等待时间
 def get_illust_from_ranking():
     """
-    从日榜随机选择图片
-    :return: 日榜中随机一张图片的信息
+    从日榜随机获取图片
+    :return: 一张图片的信息(可能为None)
     """
     illust = None;
     illust_id = rs.srandmember(RANK_ID_SET);
@@ -51,6 +52,20 @@ def get_illust_from_ranking():
     else:
         illust = pickle.loads(illust_pkl);
         # print "redis success";
+    return illust;
+
+def get_illust_from_keywords(keywords):
+    """
+    根据关键词随机获取一张图片的信息
+    :param keywords: 关键词（字符串）
+    :return: 一张图片的信息(可能为None)
+    """
+    illust = None;
+    api = pixivpy3.AppPixivAPI();
+    json_result = api.search_illust(keywords, search_target = "partial_match_for_tags");
+    illusts = json_result.illusts;
+    if len(illusts) > 0:
+        illust = illusts[randint(0, len(illusts) - 1)];
     return illust;
 
 def blacklist_illust_in_ranking(illust_id):

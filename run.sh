@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
 redis-cli flushall
+rm data/*
 mkdir data
-sudo rm data/*
-sudo python src/bot.py
+python src/bot.py

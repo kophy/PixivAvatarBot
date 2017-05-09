@@ -25,12 +25,16 @@ HELP_TEXT = (
     "/search - 关键词搜索图片\n"
 );
 
-FAIL_DOWNLOAD_TEXT = (
-    "下载失败了我也很绝望呀\n"
-    "请稍后再试吧"
-);
-
 NO_AVATAR_TEXT = (
     "图片学姐了我也很绝望呀\n"
     "请再试一次吧"
+);
+
+ASK_KEYWORD_TEXT = (
+    "请输入关键词:\n"
+    "/cancel - 取消搜索"
+);
+
+ERROR_KEYWORD_TEXT = (
+    "未找到符合条件的图片"
 );
