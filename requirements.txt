@@ -1,4 +1,5 @@
 python-telegram-bot
 pixivpy
 redis
+opencv-python
 Pillow

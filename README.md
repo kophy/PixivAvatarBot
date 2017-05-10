@@ -26,4 +26,4 @@
 ## 感谢
 针对`get_illust_from_ranking`中“更新日榜信息+处理图片”二次等待造成的性能问题，[geoffreyQiu](https://github.com/geoffreyQiu)提供了关键词优先的解决思路，~~虽然我还没有实现~~
 
-*Have fun! *
+*Have fun!*
